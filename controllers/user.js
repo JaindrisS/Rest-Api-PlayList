@@ -1,7 +1,6 @@
 const { response } = require("express");
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
-const { json } = require("express/lib/response");
 
 const getUsers = async (req, res = response) => {
   const user = await User.find({ status: true });
@@ -31,30 +30,34 @@ const signIn = async (req, res = response) => {
 
 const logIn = async (req, res = response) => {
   const { password, email } = req.body;
+  try {
+    const user = await User.findOne(
+      { email: { $regex: email, $options: "i" } },
+      { name: 1, password: 1, email: 1, status: 1 }
+    );
 
-  const user = await User.findOne(
-    { email: { $regex: email, $options: "i" } },
-    { name: 1, password: 1, email: 1, status: 1 }
-  );
+    if (!user) {
+      return res.status(400).json({ msg: `Invalid email ${email}` });
+    }
 
-  if (!user) {
-    return res.status(400).json({ msg: `Invalid email ${email}` });
+    if (!user.status) {
+      return res.status(400).json({ msg: "Invalid email or password" });
+    }
+
+    const userValid = bcryptjs.compareSync(password, user.password);
+
+    if (!userValid) {
+      return res.status(400).json({ msg: `Incorrect password` });
+    }
+
+    res.status(200).json({
+      msg: `Login ok`,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return new Error("Communicate with the administrator");
   }
-
-  if (!user.status) {
-    return res.status(400).json({ msg: "Invalid email or password" });
-  }
-
-  const userValid = bcryptjs.compareSync(password, user.password);
-
-  if (!userValid) {
-    return res.status(400).json({ msg: `Incorrect password` });
-  }
-
-  res.status(200).json({
-    msg: `Login ok`,
-    user,
-  });
 };
 
 module.exports = { signIn, getUsers, logIn };
