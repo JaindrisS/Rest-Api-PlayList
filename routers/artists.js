@@ -1,14 +1,12 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const { createdArtists } = require("../controllers/artist");
+const { createdArtists, getArtis } = require("../controllers/artist");
 const { nameArtistExists } = require("../helpers/dbValidations");
 const { validateFields } = require("../middleware/validateResult");
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.json("get-artists");
-});
+router.get("/", getArtis);
 
 router.post(
   "/createdartists",
