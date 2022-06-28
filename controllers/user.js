@@ -1,6 +1,7 @@
 const { response } = require("express");
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
+const { generateJwt } = require("../helpers/generatejwt");
 
 const getUsers = async (req, res = response) => {
   const user = await User.find({ status: true });
@@ -50,9 +51,12 @@ const logIn = async (req, res = response) => {
       return res.status(400).json({ msg: `Incorrect password` });
     }
 
+    const token = await generateJwt(user.id);
+
     res.status(200).json({
       msg: `Login ok`,
       user,
+      token,
     });
   } catch (error) {
     console.log(error);
