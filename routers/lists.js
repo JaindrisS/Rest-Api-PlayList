@@ -11,8 +11,8 @@ router.get("/", getList);
 router.post(
   "/createlists",
   [
-    body("name", "Enter a  name").notEmpty(),
-    body("name").custom(nameListExists),
+    body("namelist", "Enter a  name").notEmpty(),
+    body("namelist").custom(nameListExists),
     body("user", "Enter a valid mongoid").isMongoId(),
     body("user").custom(IdUserExists),
     validateFields,

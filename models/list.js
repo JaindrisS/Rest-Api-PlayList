@@ -7,7 +7,7 @@ const ListSchema = new Schema(
       ref: "User",
     },
 
-    name: {
+    namelist: {
       type: String,
       unique: true,
     },
@@ -24,6 +24,11 @@ const ListSchema = new Schema(
         gender: {
           type: SchemaTypes.ObjectId,
           ref: "Gender",
+        },
+
+        status: {
+          type: Boolean,
+          default: true,
         },
       },
     ],
