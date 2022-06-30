@@ -22,11 +22,6 @@ const UsersSchema = new Schema(
       type: String,
     },
 
-    list: {
-      type: SchemaTypes.ObjectId,
-      ref: "",
-    },
-
     status: {
       type: Boolean,
       default: true,

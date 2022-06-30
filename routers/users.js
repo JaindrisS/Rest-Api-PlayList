@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { param, body } = require("express-validator");
 const { validateFields } = require("../middleware/validateResult");
 const { nameExists, emailExits } = require("../helpers/dbValidations");
-const { signIn, getUsers, logIn } = require("../controllers/user");
+const { signIn, getUsers, logIn, updateUser } = require("../controllers/user");
 
 const router = Router();
 
@@ -35,6 +35,19 @@ router.post(
     validateFields,
   ],
   logIn
+);
+
+router.put(
+  "/:id",
+  [
+    body("name", "Enter a name").notEmpty().optional(),
+    body("name").custom(nameExists).optional(),
+    body("email").custom(emailExits).optional(),
+    body("email", "The field cannot be empty").notEmpty().optional(),
+
+    validateFields,
+  ],
+  updateUser
 );
 
 module.exports = router;

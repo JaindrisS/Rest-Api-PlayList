@@ -64,4 +64,28 @@ const logIn = async (req, res = response) => {
   }
 };
 
-module.exports = { signIn, getUsers, logIn };
+const updateUser = async (req, res = response) => {
+  const { id } = req.params;
+  const { img, name, email, ...resto } = req.body;
+
+  if (resto.password) {
+    const salt = bcryptjs.genSaltSync(10);
+    resto.password = bcryptjs.hashSync(resto.password, salt);
+  }
+
+  const datos = {
+    img,
+    name,
+    email,
+    password: resto.password,
+  };
+
+  const user = await User.findByIdAndUpdate(id, datos);
+
+  if (user.status === false) {
+    return res.status(400).json({ msg: "User not available" });
+  }
+  res.json({ user });
+};
+
+module.exports = { signIn, getUsers, logIn, updateUser };
