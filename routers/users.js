@@ -1,8 +1,18 @@
 const { Router } = require("express");
 const { param, body } = require("express-validator");
 const { validateFields } = require("../middleware/validateResult");
-const { nameExists, emailExits } = require("../helpers/dbValidations");
-const { signIn, getUsers, logIn, updateUser } = require("../controllers/user");
+const {
+  nameExists,
+  emailExits,
+  IdUserExists,
+} = require("../helpers/dbValidations");
+const {
+  signIn,
+  getUsers,
+  logIn,
+  updateUser,
+  deleteUser,
+} = require("../controllers/user");
 
 const router = Router();
 
@@ -40,6 +50,8 @@ router.post(
 router.put(
   "/:id",
   [
+    param("id", "id invalid").isMongoId(),
+    param("id").custom(IdUserExists),
     body("name", "Enter a name").notEmpty().optional(),
     body("name").custom(nameExists).optional(),
     body("email").custom(emailExits).optional(),
@@ -48,6 +60,12 @@ router.put(
     validateFields,
   ],
   updateUser
+);
+
+router.delete(
+  "/:id",
+  [param("id").custom(IdUserExists), param("id", "Id invalid").isMongoId()],
+  deleteUser
 );
 
 module.exports = router;

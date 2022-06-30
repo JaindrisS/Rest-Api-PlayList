@@ -82,10 +82,19 @@ const updateUser = async (req, res = response) => {
 
   const user = await User.findByIdAndUpdate(id, datos);
 
-  if (user.status === false) {
-    return res.status(400).json({ msg: "User not available" });
-  }
   res.json({ user });
 };
 
-module.exports = { signIn, getUsers, logIn, updateUser };
+const deleteUser = async (req, res = response) => {
+  const { id } = req.params;
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { status: false },
+    { new: true }
+  );
+
+  res.json({ msg: "User Delete", user });
+};
+
+module.exports = { signIn, getUsers, logIn, updateUser, deleteUser };
