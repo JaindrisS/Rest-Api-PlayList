@@ -15,4 +15,25 @@ const createdGender = async (req, res = response) => {
   res.json({ gender });
 };
 
-module.exports = { createdGender, getGender };
+const updateGender = async (req, res = response) => {
+  const body = req.body;
+  const { id } = req.params;
+
+  const gender = await Gender.findByIdAndUpdate(id, body, { new: true });
+
+  res.json({ msg: "Gender Update", gender });
+};
+
+const deleteGender = async (req, res = response) => {
+  const { id } = req.params;
+
+  const gender = await Gender.findByIdAndUpdate(
+    id,
+    { status: false },
+    { new: true }
+  );
+
+  res.json({ msg: "Gender Delete", gender });
+};
+
+module.exports = { createdGender, getGender, updateGender, deleteGender };
