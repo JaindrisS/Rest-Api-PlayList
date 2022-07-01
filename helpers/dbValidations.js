@@ -54,6 +54,14 @@ const nameArtistExists = async (value) => {
   }
 };
 
+const idArtistExists = async (value) => {
+  const artist = await Artist.findById(value);
+
+  if (!artist) {
+    throw new Error(`Artist does not exist`);
+  }
+};
+
 // Gender
 const nameGenderExists = async (value) => {
   let newName = value.split(" ");
@@ -68,6 +76,14 @@ const nameGenderExists = async (value) => {
   }
 };
 
+const idGenderExists = async (value) => {
+  const gender = await Gender.findById(value);
+
+  if (!gender) {
+    throw new Error("Id Gender  does not exist ");
+  }
+};
+
 module.exports = {
   nameExists,
   emailExits,
@@ -75,4 +91,6 @@ module.exports = {
   nameListExists,
   nameArtistExists,
   nameGenderExists,
+  idArtistExists,
+  idGenderExists,
 };
