@@ -13,4 +13,24 @@ const createdArtists = async (req, res = response) => {
   await artist.save();
   res.json({ artist });
 };
-module.exports = { createdArtists, getArtis };
+
+const updateArtists = async (req, res = response) => {
+  const body = req.body;
+  const { id } = req.params;
+
+  const artis = await Artist.findByIdAndUpdate(id, body, { new: true });
+  res.json({ msg: "Artist update", artis });
+};
+
+const deleteArtist = async (req, res = response) => {
+  const { id } = req.params;
+
+  const artist = await Artist.findByIdAndUpdate(id, {
+    status: false,
+    new: true,
+  });
+
+  res.json({ msg: "Artist Delete", artist });
+};
+
+module.exports = { createdArtists, getArtis, updateArtists, deleteArtist };

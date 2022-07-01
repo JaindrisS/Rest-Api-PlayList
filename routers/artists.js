@@ -1,7 +1,15 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const { createdArtists, getArtis } = require("../controllers/artist");
-const { nameArtistExists } = require("../helpers/dbValidations");
+const {
+  createdArtists,
+  getArtis,
+  updateArtists,
+  deleteArtist,
+} = require("../controllers/artist");
+const {
+  nameArtistExists,
+  idArtistExists,
+} = require("../helpers/dbValidations");
 const { validateFields } = require("../middleware/validateResult");
 const { validateJwt } = require("../middleware/validateJwt");
 
@@ -18,6 +26,23 @@ router.post(
     validateFields,
   ],
   createdArtists
+);
+
+router.put(
+  "/:id",
+  [
+    body("name", "Enter a name").notEmpty().optional(),
+    body("name").custom(nameArtistExists).optional(),
+    param("id").custom(idArtistExists),
+    validateFields,
+  ],
+  updateArtists
+);
+
+router.delete(
+  "/:id",
+  [param("id").custom(idArtistExists), validateFields],
+  deleteArtist
 );
 
 module.exports = router;

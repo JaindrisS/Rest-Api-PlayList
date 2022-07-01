@@ -9,6 +9,11 @@ const ArtistsSchema = new Schema(
     img: {
       type: SchemaTypes.ObjectId,
     },
+
+    status: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   {
