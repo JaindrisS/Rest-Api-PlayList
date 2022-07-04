@@ -1,9 +1,13 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const { IdUserExists, nameListExists } = require("../helpers/dbValidations");
 const { validateFields } = require("../middleware/validateResult");
-const { createList, getList } = require("../controllers/list");
 const { validateJwt } = require("../middleware/validateJwt");
+const {
+  IdUserExists,
+  nameListExists,
+  idListExist,
+} = require("../helpers/dbValidations");
+const { createList, getList, deleteList } = require("../controllers/list");
 
 const router = Router();
 
@@ -20,6 +24,16 @@ router.post(
     validateFields,
   ],
   createList
+);
+
+router.delete(
+  "/deletelists/:id",
+  [
+    param("id", "Invalid id").isMongoId(),
+    param("id").custom(idListExist),
+    validateFields,
+  ],
+  deleteList
 );
 
 module.exports = router;
