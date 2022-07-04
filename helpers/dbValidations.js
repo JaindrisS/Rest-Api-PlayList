@@ -21,7 +21,6 @@ const emailExits = async (email) => {
   }
 };
 
-// Lists
 const IdUserExists = async (id) => {
   const user = await User.findById(id);
 
@@ -30,6 +29,7 @@ const IdUserExists = async (id) => {
   }
 };
 
+// Lists
 const nameListExists = async (name) => {
   const nameList = await List.findOne({
     name: { $regex: name, $options: "i" },
@@ -37,6 +37,14 @@ const nameListExists = async (name) => {
 
   if (nameList) {
     throw new Error(`List name already exists`);
+  }
+};
+
+const idListExist = async (value) => {
+  const list = await List.findById(value);
+
+  if (!list) {
+    throw new Error(`List id does not exist ${value}`);
   }
 };
 
@@ -93,4 +101,5 @@ module.exports = {
   nameGenderExists,
   idArtistExists,
   idGenderExists,
+  idListExist,
 };
