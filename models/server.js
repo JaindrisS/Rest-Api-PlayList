@@ -7,10 +7,10 @@ class Server {
     this.app = express();
     this.port = 3000;
     this.paths = {
-      users: "/api/users",
-      lists: "/api/lists",
       artists: "/api/artists",
       genders: "/api/genders",
+      users: "/api/users",
+      lists: "/api/lists",
     };
     this.mongoconnect();
     this.middleware();
@@ -28,10 +28,10 @@ class Server {
   }
 
   router() {
-    this.app.use(this.paths.users, require("../routers/users"));
-    this.app.use(this.paths.lists, require("../routers/lists"));
     this.app.use(this.paths.artists, require("../routers/artists"));
     this.app.use(this.paths.genders, require("../routers/genders"));
+    this.app.use(this.paths.users, require("../routers/users"));
+    this.app.use(this.paths.lists, require("../routers/lists"));
   }
 
   listen() {

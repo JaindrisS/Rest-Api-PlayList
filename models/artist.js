@@ -1,6 +1,6 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
 
-const ArtistsSchema = new Schema(
+const ArtistSchema = new Schema(
   {
     name: {
       type: String,
@@ -22,4 +22,4 @@ const ArtistsSchema = new Schema(
   }
 );
 
-module.exports = model("Artist", ArtistsSchema);
+module.exports = model("Artist", ArtistSchema);

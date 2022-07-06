@@ -9,17 +9,22 @@ const ListSchema = new Schema(
 
     namelist: {
       type: String,
-      unique: true,
+      require: true,
+    },
+
+    status: {
+      type: Boolean,
+      default: true,
     },
 
     songs: [
       {
+        title: {
+          type: String,
+        },
         artist: {
           type: SchemaTypes.ObjectId,
           ref: "Artist",
-        },
-        title: {
-          type: String,
         },
         gender: {
           type: SchemaTypes.ObjectId,
