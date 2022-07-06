@@ -44,6 +44,19 @@ const deleteList = async (req, res = response) => {
   });
 };
 
+const updateListName = async (req, res = response) => {
+  const { id } = req.params;
+  const { namelist } = req.body;
+
+  const listname = await List.findByIdAndUpdate(
+    id,
+    { namelist },
+    { new: true }
+  );
+
+  res.json(`List name updated to ${listname.namelist} `);
+};
+
 const addNewSong = async (req, res = response) => {
   const { id } = req.params;
   const { title, gender, artist } = req.body;
@@ -63,4 +76,10 @@ const addNewSong = async (req, res = response) => {
   res.json({ msg: `Song ${title} added ` });
 };
 
-module.exports = { createList, getList, deleteList, addNewSong };
+module.exports = {
+  createList,
+  getList,
+  deleteList,
+  addNewSong,
+  updateListName,
+};
