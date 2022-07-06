@@ -23,7 +23,6 @@ const validateJwt = async (req, res = response, next) => {
     }
 
     req.user = user;
-    console.log(req.user);
 
     next();
   } catch (error) {
