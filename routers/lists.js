@@ -6,8 +6,17 @@ const {
   IdUserExists,
   nameListExists,
   idListExist,
+  idArtistExists,
+  idGenderExists,
+  nameSongExists,
 } = require("../helpers/dbValidations");
-const { createList, getList, deleteList } = require("../controllers/list");
+const {
+  createList,
+  getList,
+  deleteList,
+  addNewSong,
+  get,
+} = require("../controllers/list");
 
 const router = Router();
 
@@ -17,10 +26,8 @@ router.post(
   "/createlists",
   [
     validateJwt,
-    body("namelist", "Enter a  name").notEmpty(),
     body("namelist").custom(nameListExists),
-    body("user", "Enter a valid mongoid").isMongoId(),
-    body("user").custom(IdUserExists),
+    body("namelist", "Enter a  name").notEmpty(),
     validateFields,
   ],
   createList
@@ -34,6 +41,23 @@ router.delete(
     validateFields,
   ],
   deleteList
+);
+
+router.post(
+  "/addsongs/:id",
+  [
+    param("id").custom(idListExist),
+    param("id", "Enter a valid id").isMongoId(),
+    body("artist").custom(idArtistExists),
+    body("artist", "Enter a valid id").isMongoId(),
+    body("gender").custom(idGenderExists),
+    body("gender", "Enter a valid id").isMongoId(),
+    body("title", "Enter a title").notEmpty(),
+    body("title").custom(nameSongExists),
+
+    validateFields,
+  ],
+  addNewSong
 );
 
 module.exports = router;
