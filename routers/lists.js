@@ -16,6 +16,7 @@ const {
   deleteList,
   addNewSong,
   updateListName,
+  updatedSongName,
 } = require("../controllers/list");
 
 const router = Router();
@@ -70,6 +71,19 @@ router.put(
     validateFields,
   ],
   updateListName
+);
+
+router.put(
+  "/updatesongnames/:id",
+  [
+    param("id").custom(idListExist),
+    param("id", "Enter a valid id").isMongoId(),
+    body("id", "Enter a valid mongoid").isMongoId().notEmpty(),
+    body("title", "The title can't be empty").notEmpty(),
+    body("title").custom(nameSongExists),
+    validateFields,
+  ],
+  updatedSongName
 );
 
 module.exports = router;

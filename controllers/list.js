@@ -76,10 +76,36 @@ const addNewSong = async (req, res = response) => {
   res.json({ msg: `Song ${title} added ` });
 };
 
+const updatedSongName = async (req, res = response) => {
+  const { id } = req.params;
+  const { title } = req.body;
+
+  const updatename = await List.findOneAndUpdate(
+    {
+      _id: id,
+      "songs._id": req.body.id,
+    },
+
+    {
+      $set: {
+        "songs.$": { title },
+      },
+    },
+    { new: true }
+  );
+
+  if (updatename === null) {
+    return res.json("Enter the id of a valid song");
+  }
+
+  res.json({ msg: "Title successfully updated" });
+};
+
 module.exports = {
   createList,
   getList,
   deleteList,
   addNewSong,
   updateListName,
+  updatedSongName,
 };
