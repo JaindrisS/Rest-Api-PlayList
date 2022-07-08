@@ -102,6 +102,14 @@ const nameSongExists = async (value = "") => {
   }
 };
 
+const idSongExists = async (value = "") => {
+  const idExists = await List.findOne({ "songs._id": value });
+
+  if (!idExists) {
+    throw new Error("Song id is not valid or does not exist");
+  }
+};
+
 module.exports = {
   nameExists,
   emailExits,
@@ -113,4 +121,5 @@ module.exports = {
   idGenderExists,
   idListExist,
   nameSongExists,
+  idSongExists,
 };
