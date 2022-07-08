@@ -3,7 +3,10 @@ const List = require("../models/list");
 const jwt = require("jsonwebtoken");
 
 const getList = async (req, res = response) => {
-  const list = await List.find({ status: true }, { status: false })
+  const list = await List.findOne(
+    { status: true, "songs.status": true },
+    { status: false }
+  )
     .populate({
       path: "user",
       select: "name",
@@ -71,8 +74,6 @@ const addNewSong = async (req, res = response) => {
     },
   });
 
-  console.log(list);
-
   res.json({ msg: `Song ${title} added ` });
 };
 
@@ -80,7 +81,7 @@ const updatedSongName = async (req, res = response) => {
   const { id } = req.params;
   const { title } = req.body;
 
-  const updatename = await List.findOneAndUpdate(
+  const updateName = await List.findOneAndUpdate(
     {
       _id: id,
       "songs._id": req.body.id,
@@ -94,11 +95,27 @@ const updatedSongName = async (req, res = response) => {
     { new: true }
   );
 
-  if (updatename === null) {
+  if (updateName === null) {
     return res.json("Enter the id of a valid song");
   }
 
   res.json({ msg: "Title successfully updated" });
+};
+
+const deleteSong = async (req, res = response) => {
+  const { id } = req.params;
+
+  const deleteSong = await List.updateOne(
+    {
+      _id: id,
+    },
+    {
+      $pull: { songs: { _id: req.body.id } },
+    },
+    { new: true }
+  );
+
+  res.json({ msg: "Song successfully delete" });
 };
 
 module.exports = {
@@ -108,4 +125,5 @@ module.exports = {
   addNewSong,
   updateListName,
   updatedSongName,
+  deleteSong,
 };

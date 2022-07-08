@@ -9,6 +9,7 @@ const {
   idArtistExists,
   idGenderExists,
   nameSongExists,
+  idSongExists,
 } = require("../helpers/dbValidations");
 const {
   createList,
@@ -17,6 +18,7 @@ const {
   addNewSong,
   updateListName,
   updatedSongName,
+  deleteSong,
 } = require("../controllers/list");
 
 const router = Router();
@@ -84,6 +86,18 @@ router.put(
     validateFields,
   ],
   updatedSongName
+);
+
+router.delete(
+  "/deletesongs/:id",
+  [
+    param("id").custom(idListExist),
+    param("id", "Enter a valid mongoid").isMongoId(),
+    body("id", "Enter the id of the song to delete").notEmpty(),
+    body("id").custom(idSongExists),
+    validateFields,
+  ],
+  deleteSong
 );
 
 module.exports = router;
