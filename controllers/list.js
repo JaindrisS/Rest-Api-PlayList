@@ -16,6 +16,18 @@ const getList = async (req, res = response) => {
   res.status(200).json({ list });
 };
 
+const getUserList = async (req, res = response) => {
+  const token = req.header("token");
+  const { uid } = jwt.verify(token, process.env.JWTPRIVATEKEY);
+
+  const userLists = await List.find({ user: uid }).populate({
+    path: "user",
+    select: "name",
+  });
+
+  res.json({ userLists });
+};
+
 const createList = async (req, res = response) => {
   let { namelist } = req.body;
   const token = req.header("token");
@@ -126,4 +138,5 @@ module.exports = {
   updateListName,
   updatedSongName,
   deleteSong,
+  getUserList,
 };

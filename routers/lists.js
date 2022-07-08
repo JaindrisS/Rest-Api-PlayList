@@ -19,11 +19,14 @@ const {
   updateListName,
   updatedSongName,
   deleteSong,
+  getUserList,
 } = require("../controllers/list");
 
 const router = Router();
 
 router.get("/", getList);
+
+router.get("/userlists", [validateJwt], getUserList);
 
 router.post(
   "/createlists",
