@@ -11,6 +11,7 @@ class Server {
       genders: "/api/genders",
       users: "/api/users",
       lists: "/api/lists",
+      auth: "/api/auth",
     };
     this.mongoconnect();
     this.middleware();
@@ -32,6 +33,7 @@ class Server {
     this.app.use(this.paths.genders, require("../routers/genders"));
     this.app.use(this.paths.users, require("../routers/users"));
     this.app.use(this.paths.lists, require("../routers/lists"));
+    this.app.use(this.paths.auth, require("../routers/auth"));
   }
 
   listen() {
