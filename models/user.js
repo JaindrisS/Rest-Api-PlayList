@@ -22,6 +22,11 @@ const UserSchema = new Schema(
       type: String,
     },
 
+    rol: {
+      type: String,
+      default: "USER",
+    },
+
     status: {
       type: Boolean,
       default: true,
