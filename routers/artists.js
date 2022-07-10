@@ -15,12 +15,13 @@ const { validateJwt } = require("../middleware/validateJwt");
 
 const router = Router();
 
-router.get("/", getArtis);
+router.get("/", [validateJwt, hasRol("USER", "ADMIN")], getArtis);
 
 router.post(
   "/createdartists",
   [
     validateJwt,
+    hasRol("USER", "ADMIN"),
     body("name", "Enter a name"),
     body("name").custom(nameArtistExists),
     validateFields,
@@ -31,6 +32,8 @@ router.post(
 router.put(
   "/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     body("name", "Enter a name").notEmpty().optional(),
     body("name").custom(nameArtistExists).optional(),
     param("id").custom(idArtistExists),
@@ -41,7 +44,12 @@ router.put(
 
 router.delete(
   "/:id",
-  [param("id").custom(idArtistExists), validateFields],
+  [
+    validateJwt,
+    hasRol("ADMIN"),
+    param("id").custom(idArtistExists),
+    validateFields,
+  ],
   deleteArtist
 );
 

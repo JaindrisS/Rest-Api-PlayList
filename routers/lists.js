@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { body, param } = require("express-validator");
 const { validateFields } = require("../middleware/validateResult");
 const { validateJwt } = require("../middleware/validateJwt");
+const { isAdminRol, hasRol } = require("../middleware/validateRole");
 const {
   IdUserExists,
   nameListExists,
@@ -24,14 +25,15 @@ const {
 
 const router = Router();
 
-router.get("/", getList);
+router.get("/", [validateJwt, hasRol("USER", "ADMIN")], getList);
 
-router.get("/userlists", [validateJwt], getUserList);
+router.get("/userlists", [validateJwt, hasRol("USER", "ADMIN")], getUserList);
 
 router.post(
   "/createlists",
   [
     validateJwt,
+    hasRol("USER", "ADMIN"),
     body("namelist").custom(nameListExists),
     body("namelist", "Enter a  name").notEmpty(),
     validateFields,
@@ -42,6 +44,8 @@ router.post(
 router.delete(
   "/deletelists/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     param("id", "Invalid id").isMongoId(),
     param("id").custom(idListExist),
     validateFields,
@@ -52,6 +56,8 @@ router.delete(
 router.post(
   "/addsongs/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     param("id").custom(idListExist),
     param("id", "Enter a valid id").isMongoId(),
     body("artist").custom(idArtistExists),
@@ -69,6 +75,8 @@ router.post(
 router.put(
   "/updatelistnames/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     param("id").custom(idListExist),
     param("id", "Enter a valid id").isMongoId(),
     body("namelist").custom(nameListExists),
@@ -81,6 +89,8 @@ router.put(
 router.put(
   "/updatesongnames/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     param("id").custom(idListExist),
     param("id", "Enter a valid id").isMongoId(),
     body("id", "Enter a valid mongoid").isMongoId().notEmpty(),
@@ -94,6 +104,8 @@ router.put(
 router.delete(
   "/deletesongs/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     param("id").custom(idListExist),
     param("id", "Enter a valid mongoid").isMongoId(),
     body("id", "Enter the id of the song to delete").notEmpty(),

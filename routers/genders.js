@@ -15,11 +15,13 @@ const {
 
 const router = Router();
 
-router.get("/", getGender);
+router.get("/", [validateJwt, hasRol("USER", "ADMIN")], getGender);
 
 router.post(
   "/createdgenders",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     validateJwt,
     body("name", "Enter a name").notEmpty(),
     body("name").custom(nameGenderExists),
@@ -31,6 +33,8 @@ router.post(
 router.put(
   "/:id",
   [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
     param("id").isMongoId(),
     param("id").custom(idGenderExists),
     body("name", "Enter a name ").notEmpty().optional(),
@@ -42,7 +46,13 @@ router.put(
 
 router.delete(
   "/:id",
-  [param("id").isMongoId(), param("id").custom(idGenderExists), validateFields],
+  [
+    validateJwt,
+    hasRol("USER", "ADMIN"),
+    param("id").isMongoId(),
+    param("id").custom(idGenderExists),
+    validateFields,
+  ],
   deleteGender
 );
 
