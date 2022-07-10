@@ -4,14 +4,14 @@ const Artist = require("../models/artist");
 const getArtis = async (req, res = response) => {
   const artist = await Artist.find();
 
-  res.json({ artist });
+  res.status(200).json({ artist });
 };
 
 const createdArtists = async (req, res = response) => {
   const { name } = req.body;
   const artist = new Artist({ name });
   await artist.save();
-  res.json({ artist });
+  res.status(201).json({ artist });
 };
 
 const updateArtists = async (req, res = response) => {
@@ -19,7 +19,7 @@ const updateArtists = async (req, res = response) => {
   const { id } = req.params;
 
   const artis = await Artist.findByIdAndUpdate(id, body, { new: true });
-  res.json({ msg: "Artist update", artis });
+  res.status(201).json({ msg: "Artist update", artis });
 };
 
 const deleteArtist = async (req, res = response) => {
@@ -30,7 +30,7 @@ const deleteArtist = async (req, res = response) => {
     new: true,
   });
 
-  res.json({ msg: "Artist Delete", artist });
+  res.status(200).json({ msg: "Artist Delete", artist });
 };
 
 module.exports = { createdArtists, getArtis, updateArtists, deleteArtist };

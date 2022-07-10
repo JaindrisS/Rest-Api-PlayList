@@ -4,7 +4,7 @@ const Gender = require("../models/gender");
 const getGender = async (req, res = response) => {
   const gender = await Gender.find();
 
-  res.json({ gender });
+  res.status(200).json({ gender });
 };
 
 const createdGender = async (req, res = response) => {
@@ -12,7 +12,7 @@ const createdGender = async (req, res = response) => {
 
   const gender = new Gender({ name });
   await gender.save();
-  res.json({ gender });
+  res.status(201).json({ gender });
 };
 
 const updateGender = async (req, res = response) => {
@@ -21,7 +21,7 @@ const updateGender = async (req, res = response) => {
 
   const gender = await Gender.findByIdAndUpdate(id, body, { new: true });
 
-  res.json({ msg: "Gender Update", gender });
+  res.status(201).json({ msg: "Gender Update", gender });
 };
 
 const deleteGender = async (req, res = response) => {
@@ -33,7 +33,7 @@ const deleteGender = async (req, res = response) => {
     { new: true }
   );
 
-  res.json({ msg: "Gender Delete", gender });
+  res.status(201).json({ msg: "Gender Delete", gender });
 };
 
 module.exports = { createdGender, getGender, updateGender, deleteGender };

@@ -25,7 +25,7 @@ const getUserList = async (req, res = response) => {
     select: "name",
   });
 
-  res.json({ userLists });
+  res.status(200).json({ userLists });
 };
 
 const createList = async (req, res = response) => {
@@ -69,7 +69,7 @@ const updateListName = async (req, res = response) => {
     { new: true }
   );
 
-  res.json(`List name updated to ${listname.namelist} `);
+  res.status(201).json(`List name updated to ${listname.namelist} `);
 };
 
 const addNewSong = async (req, res = response) => {
@@ -86,7 +86,7 @@ const addNewSong = async (req, res = response) => {
     },
   });
 
-  res.json({ msg: `Song ${title} added ` });
+  res.status(201).json({ msg: `Song ${title} added ` });
 };
 
 const updatedSongName = async (req, res = response) => {
@@ -111,7 +111,7 @@ const updatedSongName = async (req, res = response) => {
     return res.json("Enter the id of a valid song");
   }
 
-  res.json({ msg: "Title successfully updated" });
+  res.status(201).json({ msg: "Title successfully updated" });
 };
 
 const deleteSong = async (req, res = response) => {
@@ -127,7 +127,7 @@ const deleteSong = async (req, res = response) => {
     { new: true }
   );
 
-  res.json({ msg: "Song successfully delete" });
+  res.status(200).json({ msg: "Song successfully delete" });
 };
 
 module.exports = {
