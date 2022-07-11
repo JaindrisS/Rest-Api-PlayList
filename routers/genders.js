@@ -2,6 +2,8 @@ const { Router } = require("express");
 const { body, param } = require("express-validator");
 const { validateFields } = require("../middleware/validateResult");
 const { validateJwt } = require("../middleware/validateJwt");
+const { hasRol, isAdminRol } = require("../middleware/validateRole");
+
 const {
   nameGenderExists,
   idGenderExists,

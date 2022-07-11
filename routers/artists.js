@@ -12,6 +12,7 @@ const {
 } = require("../helpers/dbValidations");
 const { validateFields } = require("../middleware/validateResult");
 const { validateJwt } = require("../middleware/validateJwt");
+const { hasRol, isAdminRol } = require("../middleware/validateRole");
 
 const router = Router();
 
