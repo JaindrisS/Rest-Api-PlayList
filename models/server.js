@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { mongoConnect } = require("../db/config");
+const { client } = require("../middleware/cache");
 
 class Server {
   constructor() {
@@ -13,10 +14,15 @@ class Server {
       lists: "/api/lists",
       auth: "/api/auth",
     };
+    this.redisCacheConnect();
     this.mongoconnect();
     this.middleware();
     this.router();
     this.listen();
+  }
+
+  async redisCacheConnect() {
+    await client.connect();
   }
 
   async mongoconnect() {
