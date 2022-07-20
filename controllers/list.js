@@ -1,9 +1,10 @@
 const { response } = require("express");
 const List = require("../models/list");
 const jwt = require("jsonwebtoken");
+const { sendToCache, cache } = require("../middleware/cache");
 
 const getList = async (req, res = response) => {
-  const list = await List.findOne(
+  const list = await List.find(
     { status: true, "songs.status": true },
     { status: false }
   )
@@ -13,6 +14,7 @@ const getList = async (req, res = response) => {
     })
     .populate({ path: "songs.artist", select: "name" })
     .populate({ path: "songs.gender", select: "name" });
+
   res.status(200).json({ list });
 };
 
@@ -24,6 +26,7 @@ const getUserList = async (req, res = response) => {
     path: "user",
     select: "name",
   });
+  await sendToCache(uid, 3600, userLists);
 
   res.status(200).json({ userLists });
 };
