@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { body, param } = require("express-validator");
 const { validateFields } = require("../middleware/validateResult");
 const { validateJwt } = require("../middleware/validateJwt");
+const { cache } = require("../middleware/cache");
 const { isAdminRol, hasRol } = require("../middleware/validateRole");
 const {
   IdUserExists,
@@ -25,9 +26,18 @@ const {
 
 const router = Router();
 
-router.get("/", [validateJwt, hasRol("USER", "ADMIN")], getList);
+router.get(
+  "/",
+  [validateJwt, hasRol("USER", "ADMIN")],
 
-router.get("/userlists", [validateJwt, hasRol("USER", "ADMIN")], getUserList);
+  getList
+);
+
+router.get(
+  "/userlists",
+  [validateJwt, cache, hasRol("USER", "ADMIN")],
+  getUserList
+);
 
 router.post(
   "/createlists",
