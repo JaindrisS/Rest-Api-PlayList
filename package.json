@@ -4,7 +4,6 @@
   "description": "Play lists",
   "main": "app.js",
   "scripts": {
-
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,7 +20,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.0",
     "nodemailer": "^6.7.5",
-    "nodemailer-sendgrid": "^1.0.3"
+    "nodemailer-sendgrid": "^1.0.3",
+    "redis": "^4.2.0",
+    "redis-commander": "^0.8.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
