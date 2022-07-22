@@ -1,7 +1,8 @@
 const { response } = require("express");
-const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
+const User = require("../models/user");
 const { generateJwt } = require("../helpers/generatejwt");
+const { sendEmail } = require("../helpers/emailer");
 
 const signIn = async (req, res = response) => {
   const { __v, name, password, ...resto } = req.body;
@@ -16,8 +17,9 @@ const signIn = async (req, res = response) => {
   };
 
   const user = await new User(data);
-  await user.save();
+  sendEmail(user);
 
+  await user.save();
   res.status(201).json({ msg: `post`, user });
 };
 
