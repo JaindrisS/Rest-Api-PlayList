@@ -7,7 +7,7 @@ const ArtistSchema = new Schema(
     },
 
     img: {
-      type: SchemaTypes.ObjectId,
+      type: String,
     },
 
     status: {
