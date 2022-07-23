@@ -8,11 +8,9 @@ client.on("connect", () => {
   console.log("Redis connected");
 });
 
-client.on("error", () => {
+client.on("error", (error) => {
   console.log("Redis error", error);
 });
-
-
 
 const sendToCache = async (keycache, timeexpire, data) => {
   const saveResult = await client.set(keycache, JSON.stringify(data), {
