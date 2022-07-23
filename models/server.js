@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { mongoConnect } = require("../db/config");
 const { client } = require("../middleware/cache");
+const fileUpload = require("express-fileupload");
 
 class Server {
   constructor() {
@@ -13,6 +14,7 @@ class Server {
       users: "/api/users",
       lists: "/api/lists",
       auth: "/api/auth",
+      upload: "/api/upload",
     };
     this.redisCacheConnect();
     this.mongoconnect();
@@ -32,6 +34,14 @@ class Server {
   middleware() {
     this.app.use(express.json());
     this.app.use(cors());
+
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+        createParentPath: true,
+      })
+    );
   }
 
   router() {
@@ -40,6 +50,7 @@ class Server {
     this.app.use(this.paths.users, require("../routers/users"));
     this.app.use(this.paths.lists, require("../routers/lists"));
     this.app.use(this.paths.auth, require("../routers/auth"));
+    this.app.use(this.paths.upload, require("../routers/upload-img"));
   }
 
   listen() {
