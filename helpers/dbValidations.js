@@ -110,6 +110,17 @@ const idSongExists = async (value = "") => {
   }
 };
 
+// upload img
+
+const permittedCollections = async (collection = "", collections = []) => {
+  const includes = collections.includes(collection);
+
+  if (!includes) {
+    throw new Error(`collection ${collection} is not permitted`);
+  }
+  return true;
+};
+
 module.exports = {
   nameExists,
   emailExits,
@@ -122,4 +133,5 @@ module.exports = {
   idListExist,
   nameSongExists,
   idSongExists,
+  permittedCollections,
 };
