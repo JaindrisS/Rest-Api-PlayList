@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const controllerArtists = require("../controllers/artist");
+const validateJwt = require("../middleware/validateJwt");
+const validateRole = require("../middleware/validateRole");
 const dbValidations = require("../helpers/dbValidations");
-const { validateFields } = require("../middleware/validateResult");
-const { validateJwt } = require("../middleware/validateJwt");
-const { hasRol, isAdminRol } = require("../middleware/validateRole");
+const validateResult = require("../middleware/validateResult");
+const controllerArtists = require("../controllers/artist");
 
 const router = Router();
 
@@ -18,10 +18,10 @@ router.post(
   "/createdartists",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     body("name", "Enter a name"),
     body("name").custom(dbValidations.nameArtistExists),
-    validateFields,
+    validateResult.validateFields,
   ],
   controllerArtists.createdArtists
 );
@@ -34,7 +34,7 @@ router.put(
     body("name", "Enter a name").notEmpty().optional(),
     body("name").custom(dbValidations.nameArtistExists).optional(),
     param("id").custom(dbValidations.idArtistExists),
-    validateFields,
+    validateResult.validateFields,
   ],
   controllerArtists.updateArtists
 );

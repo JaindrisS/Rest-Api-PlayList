@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const { param, body } = require("express-validator");
-const { validateFields } = require("../middleware/validateResult");
-const { nameExists, emailExits } = require("../helpers/dbValidations");
-const { signIn, logIn } = require("../controllers/auth");
+const dbValidations = require("../helpers/dbValidations");
+const validateResult = require("../middleware/validateResult");
+const controllerAuth = require("../controllers/auth");
 
 const router = Router();
 
@@ -10,17 +10,17 @@ const router = Router();
 router.post(
   "/signin",
   [
-    body("name", " Enter a name").notEmpty().custom(nameExists),
+    body("name", " Enter a name").notEmpty().custom(dbValidations.nameExists),
     body("password", "Enter a valid password minimum 6 values maximum 14")
       .notEmpty()
       .isLength({ min: 6, max: 14 }),
     body("email", "Enter a valid email")
       .notEmpty()
       .isEmail()
-      .custom(emailExits),
-    validateFields,
+      .custom(dbValidations.emailExits),
+    validateResult.validateFields,
   ],
-  signIn
+  controllerAuth.signIn
 );
 
 // log in
@@ -30,9 +30,9 @@ router.post(
   [
     body("email", "Enter a valid email").isEmail(),
     body("password", "Enter a password").notEmpty(),
-    validateFields,
+    validateResult.validateFields,
   ],
-  logIn
+  controllerAuth.logIn
 );
 
 module.exports = router;

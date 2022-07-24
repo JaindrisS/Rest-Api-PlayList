@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const { uploadImg } = require("../controllers/upload-img");
+const uploadImg = require("../controllers/upload-img");
 const validateFiles = require("../middleware/validateFiles");
-const { permittedCollections } = require("../helpers/dbValidations");
-const { validateFields } = require("../middleware/validateResult");
+const dbValidations = require("../helpers/dbValidations");
+const validateFields = require("../middleware/validateResult");
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.put(
     validateFiles,
     param("id", "Invalid id").isMongoId(),
     param("collection").custom((c) =>
-      permittedCollections(c, ["user", "artist"])
+      dbValidations.permittedCollections(c, ["user", "artist"])
     ),
     validateFields,
   ],

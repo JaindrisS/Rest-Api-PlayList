@@ -1,61 +1,56 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const { validateFields } = require("../middleware/validateResult");
-const { validateJwt } = require("../middleware/validateJwt");
-const { hasRol, isAdminRol } = require("../middleware/validateRole");
-
-const {
-  nameGenderExists,
-  idGenderExists,
-} = require("../helpers/dbValidations");
-const {
-  createdGender,
-  getGender,
-  updateGender,
-  deleteGender,
-} = require("../controllers/gender");
+const validateJwt = require("../middleware/validateJwt");
+const validateRole = require("../middleware/validateRole");
+const dbValidations = require("../helpers/dbValidations");
+const validateFields = require("../middleware/validateResult");
+const controllerGender = require("../controllers/gender");
 
 const router = Router();
 
-router.get("/", [validateJwt, hasRol("USER", "ADMIN")], getGender);
+router.get(
+  "/",
+  [validateJwt, hasRol("USER", "ADMIN")],
+  controllerGender.getGender
+);
 
 router.post(
   "/createdgenders",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     validateJwt,
     body("name", "Enter a name").notEmpty(),
-    body("name").custom(nameGenderExists),
+    body("name").custom(dbValidations.nameGenderExists),
     validateFields,
   ],
-  createdGender
+  controllerGender.createdGender
 );
 
 router.put(
   "/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     param("id").isMongoId(),
-    param("id").custom(idGenderExists),
+    param("id").custom(dbValidations.idGenderExists),
     body("name", "Enter a name ").notEmpty().optional(),
-    body("name").custom(nameGenderExists).optional(),
+    body("name").custom(dbValidations.nameGenderExists).optional(),
     validateFields,
   ],
-  updateGender
+  controllerGender.updateGender
 );
 
 router.delete(
   "/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     param("id").isMongoId(),
-    param("id").custom(idGenderExists),
+    param("id").custom(dbValidations.idGenderExists),
     validateFields,
   ],
-  deleteGender
+  controllerGender.deleteGender
 );
 
 module.exports = router;

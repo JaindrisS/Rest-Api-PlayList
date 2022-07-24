@@ -30,4 +30,4 @@ const validateJwt = async (req, res = response, next) => {
     res.status(401).json({ msg: "Invalid token" });
   }
 };
-module.exports = { validateJwt };
+module.exports = validateJwt;

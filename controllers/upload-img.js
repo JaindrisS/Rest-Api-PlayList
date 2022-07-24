@@ -50,4 +50,4 @@ const uploadImg = async (req = request, res = response) => {
   res.status(201).json(model);
 };
 
-module.exports = { uploadImg };
+module.exports = uploadImg;

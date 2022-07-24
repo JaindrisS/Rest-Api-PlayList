@@ -1,128 +1,111 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const { validateFields } = require("../middleware/validateResult");
-const { validateJwt } = require("../middleware/validateJwt");
-const { cache } = require("../middleware/cache");
-const { isAdminRol, hasRol } = require("../middleware/validateRole");
-const {
-  IdUserExists,
-  nameListExists,
-  idListExist,
-  idArtistExists,
-  idGenderExists,
-  nameSongExists,
-  idSongExists,
-} = require("../helpers/dbValidations");
-const {
-  createList,
-  getList,
-  deleteList,
-  addNewSong,
-  updateListName,
-  updatedSongName,
-  deleteSong,
-  getUserList,
-} = require("../controllers/list");
+const validateJwt = require("../middleware/validateJwt");
+const caching = require("../middleware/cache");
+const validateRole = require("../middleware/validateRole");
+const dbValidations = require("../helpers/dbValidations");
+const validateFields = require("../middleware/validateResult");
+const controllerList = require("../controllers/list");
 
 const router = Router();
 
 router.get(
   "/",
-  [validateJwt, hasRol("USER", "ADMIN")],
+  [validateJwt, validateRole.hasRol("USER", "ADMIN")],
 
-  getList
+  controllerList.getList
 );
 
 router.get(
   "/userlists",
-  [validateJwt, cache, hasRol("USER", "ADMIN")],
-  getUserList
+  [validateJwt, caching.cache, validateRole.hasRol("USER", "ADMIN")],
+  controllerList.getUserList
 );
 
 router.post(
   "/createlists",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
-    body("namelist").custom(nameListExists),
+    validateRole.hasRol("USER", "ADMIN"),
+    body("namelist").custom(dbValidations.nameListExists),
     body("namelist", "Enter a  name").notEmpty(),
     validateFields,
   ],
-  createList
+  controllerListcreateList
 );
 
 router.delete(
   "/deletelists/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     param("id", "Invalid id").isMongoId(),
-    param("id").custom(idListExist),
+    param("id").custom(dbValidations.idListExist),
     validateFields,
   ],
-  deleteList
+  controllerListdeleteList
 );
 
 router.post(
   "/addsongs/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
-    param("id").custom(idListExist),
+    validateRole.hasRol("USER", "ADMIN"),
+    param("id").custom(dbValidations.idListExist),
     param("id", "Enter a valid id").isMongoId(),
-    body("artist").custom(idArtistExists),
+    body("artist").custom(dbValidations.idArtistExists),
     body("artist", "Enter a valid id").isMongoId(),
-    body("gender").custom(idGenderExists),
+    body("gender").custom(dbValidations.idGenderExists),
     body("gender", "Enter a valid id").isMongoId(),
     body("title", "Enter a title").notEmpty(),
-    body("title").custom(nameSongExists),
+    body("title").custom(dbValidations.nameSongExists),
 
     validateFields,
   ],
-  addNewSong
+  controllerListaddNewSong
 );
 
 router.put(
   "/updatelistnames/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
-    param("id").custom(idListExist),
+    validateRole.hasRol("USER", "ADMIN"),
+    param("id").custom(dbValidations.idListExist),
     param("id", "Enter a valid id").isMongoId(),
-    body("namelist").custom(nameListExists),
+    body("namelist").custom(dbValidations.nameListExists),
     body("namelist", "Enter a name List").notEmpty(),
     validateFields,
   ],
-  updateListName
+  controllerListupdateListName
 );
 
 router.put(
   "/updatesongnames/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
-    param("id").custom(idListExist),
+    validateRole.hasRol("USER", "ADMIN"),
+    param("id").custom(dbValidations.idListExist),
     param("id", "Enter a valid id").isMongoId(),
     body("id", "Enter a valid mongoid").isMongoId().notEmpty(),
     body("title", "The title can't be empty").notEmpty(),
-    body("title").custom(nameSongExists),
+    body("title").custom(dbValidations.nameSongExists),
     validateFields,
   ],
-  updatedSongName
+  controllerListupdatedSongName
 );
 
 router.delete(
   "/deletesongs/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
-    param("id").custom(idListExist),
+    validateRole.hasRol("USER", "ADMIN"),
+    param("id").custom(dbValidations.idListExist),
     param("id", "Enter a valid mongoid").isMongoId(),
     body("id", "Enter the id of the song to delete").notEmpty(),
-    body("id").custom(idSongExists),
+    body("id").custom(dbValidations.idSongExists),
     validateFields,
   ],
-  deleteSong
+  controllerListdeleteSong
 );
 
 module.exports = router;

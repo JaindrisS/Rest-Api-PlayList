@@ -1,14 +1,10 @@
 const { Router } = require("express");
 const { param, body } = require("express-validator");
-const { validateFields } = require("../middleware/validateResult");
-const { validateJwt } = require("../middleware/validateJwt");
-const { getUsers, updateUser, deleteUser } = require("../controllers/user");
-const {
-  nameExists,
-  emailExits,
-  IdUserExists,
-} = require("../helpers/dbValidations");
-const { hasRol, isAdminRol } = require("../middleware/validateRole");
+const validateJwt = require("../middleware/validateJwt");
+const validateRole = require("../middleware/validateRole");
+const dbValidations = require("../helpers/dbValidations");
+const validateFields = require("../middleware/validateResult");
+const controllersUser = require("../controllers/user");
 
 const router = Router();
 
@@ -18,28 +14,28 @@ router.put(
   "/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     param("id", "id invalid").isMongoId(),
-    param("id").custom(IdUserExists),
+    param("id").custom(dbValidations.IdUserExists),
     body("name", "Enter a name").notEmpty().optional(),
-    body("name").custom(nameExists).optional(),
-    body("email").custom(emailExits).optional(),
+    body("name").custom(dbValidations.nameExists).optional(),
+    body("email").custom(dbValidations.emailExits).optional(),
     body("email", "The field cannot be empty").notEmpty().optional(),
 
     validateFields,
   ],
-  updateUser
+  controllersUser.updateUser
 );
 
 router.delete(
   "/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
-    param("id").custom(IdUserExists),
+    validateRole.hasRol("USER", "ADMIN"),
+    param("id").custom(dbValidations.IdUserExists),
     param("id", "Id invalid").isMongoId(),
   ],
-  deleteUser
+  controllersUser.deleteUser
 );
 
 module.exports = router;
