@@ -1,10 +1,11 @@
 {
   "name": "favorites-list-rest-api",
   "version": "1.0.0",
-  "description": "Play lists",
+  "description": "Music playlist management ",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js"
   },
   "keywords": [],
   "author": "Jaindris Sosa",

@@ -1,16 +1,16 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const validateJwt = require("../middleware/validateJwt");
-const validateRole = require("../middleware/validateRole");
-const dbValidations = require("../helpers/dbValidations");
-const validateFields = require("../middleware/validateResult");
-const controllerGender = require("../controllers/gender");
+const validateJwt = require("../../middleware/validateJwt");
+const validateRole = require("../../middleware/validateRole");
+const dbValidations = require("../../helpers/dbValidations");
+const validateFields = require("../../middleware/validateResult");
+const controllerGender = require("../../controllers/gender");
 
 const router = Router();
 
 router.get(
   "/",
-  [validateJwt, hasRol("USER", "ADMIN")],
+  [validateJwt, validateRole.hasRol("USER", "ADMIN")],
   controllerGender.getGender
 );
 

@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const uploadImg = require("../controllers/upload-img");
-const validateFiles = require("../middleware/validateFiles");
-const dbValidations = require("../helpers/dbValidations");
-const validateFields = require("../middleware/validateResult");
+const uploadImg = require("../../controllers/upload-img");
+const validateFiles = require("../../middleware/validateFiles");
+const dbValidations = require("../../helpers/dbValidations");
+const validateFields = require("../../middleware/validateResult");
 
 const router = Router();
 

@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const validateJwt = require("../middleware/validateJwt");
-const caching = require("../middleware/cache");
-const validateRole = require("../middleware/validateRole");
-const dbValidations = require("../helpers/dbValidations");
-const validateFields = require("../middleware/validateResult");
-const controllerList = require("../controllers/list");
+const validateJwt = require("../../middleware/validateJwt");
+const caching = require("../../middleware/cache");
+const validateRole = require("../../middleware/validateRole");
+const dbValidations = require("../../helpers/dbValidations");
+const validateFields = require("../../middleware/validateResult");
+const controllerList = require("../../controllers/list");
 
 const router = Router();
 
@@ -31,7 +31,7 @@ router.post(
     body("namelist", "Enter a  name").notEmpty(),
     validateFields,
   ],
-  controllerListcreateList
+  controllerList.createList
 );
 
 router.delete(
@@ -43,7 +43,7 @@ router.delete(
     param("id").custom(dbValidations.idListExist),
     validateFields,
   ],
-  controllerListdeleteList
+  controllerList.deleteList
 );
 
 router.post(
@@ -62,7 +62,7 @@ router.post(
 
     validateFields,
   ],
-  controllerListaddNewSong
+  controllerList.addNewSong
 );
 
 router.put(
@@ -76,7 +76,7 @@ router.put(
     body("namelist", "Enter a name List").notEmpty(),
     validateFields,
   ],
-  controllerListupdateListName
+  controllerList.updateListName
 );
 
 router.put(
@@ -91,7 +91,7 @@ router.put(
     body("title").custom(dbValidations.nameSongExists),
     validateFields,
   ],
-  controllerListupdatedSongName
+  controllerList.updatedSongName
 );
 
 router.delete(
@@ -105,7 +105,7 @@ router.delete(
     body("id").custom(dbValidations.idSongExists),
     validateFields,
   ],
-  controllerListdeleteSong
+  controllerList.deleteSong
 );
 
 module.exports = router;

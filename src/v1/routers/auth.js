@@ -1,11 +1,10 @@
 const { Router } = require("express");
 const { param, body } = require("express-validator");
-const dbValidations = require("../helpers/dbValidations");
-const validateResult = require("../middleware/validateResult");
-const controllerAuth = require("../controllers/auth");
+const dbValidations = require("../../helpers/dbValidations");
+const validateResult = require("../../middleware/validateResult");
+const controllerAuth = require("../../controllers/auth");
 
 const router = Router();
-
 // Register
 router.post(
   "/signin",
@@ -18,7 +17,7 @@ router.post(
       .notEmpty()
       .isEmail()
       .custom(dbValidations.emailExits),
-    validateResult.validateFields,
+    validateResult,
   ],
   controllerAuth.signIn
 );
@@ -30,7 +29,7 @@ router.post(
   [
     body("email", "Enter a valid email").isEmail(),
     body("password", "Enter a password").notEmpty(),
-    validateResult.validateFields,
+    validateResult,
   ],
   controllerAuth.logIn
 );

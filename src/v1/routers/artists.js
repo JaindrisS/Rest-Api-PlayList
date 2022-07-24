@@ -1,17 +1,17 @@
 const { Router } = require("express");
 const { body, param } = require("express-validator");
-const validateJwt = require("../middleware/validateJwt");
-const validateRole = require("../middleware/validateRole");
-const dbValidations = require("../helpers/dbValidations");
-const validateResult = require("../middleware/validateResult");
-const controllerArtists = require("../controllers/artist");
+const validateJwt = require("../../middleware/validateJwt");
+const validateRole = require("../../middleware/validateRole");
+const dbValidations = require("../../helpers/dbValidations");
+const validateFields = require("../../middleware/validateResult");
+const controllers = require("../../controllers/artist");
 
 const router = Router();
 
 router.get(
   "/",
-  [validateJwt, hasRol("USER", "ADMIN")],
-  controllerArtists.getArtis
+  [validateJwt, validateRole.hasRol("USER", "ADMIN")],
+  controllers.getArtis
 );
 
 router.post(
@@ -21,33 +21,33 @@ router.post(
     validateRole.hasRol("USER", "ADMIN"),
     body("name", "Enter a name"),
     body("name").custom(dbValidations.nameArtistExists),
-    validateResult.validateFields,
+    validateFields,
   ],
-  controllerArtists.createdArtists
+  controllers.createdArtists
 );
 
 router.put(
   "/:id",
   [
     validateJwt,
-    hasRol("USER", "ADMIN"),
+    validateRole.hasRol("USER", "ADMIN"),
     body("name", "Enter a name").notEmpty().optional(),
     body("name").custom(dbValidations.nameArtistExists).optional(),
     param("id").custom(dbValidations.idArtistExists),
-    validateResult.validateFields,
+    validateFields,
   ],
-  controllerArtists.updateArtists
+  controllers.updateArtists
 );
 
 router.delete(
   "/:id",
   [
     validateJwt,
-    hasRol("ADMIN"),
+    validateRole.hasRol("ADMIN"),
     param("id").custom(dbValidations.idArtistExists),
     validateFields,
   ],
-  controllerArtists.deleteArtist
+  controllers.deleteArtist
 );
 
 module.exports = router;
