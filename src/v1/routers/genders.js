@@ -15,7 +15,7 @@ router.get(
 );
 
 router.post(
-  "/createdgenders",
+  "/create",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),

@@ -9,18 +9,18 @@ class Server {
     this.app = express();
     this.port = 3000;
     this.paths = {
-      artists: "/api/v1/artists",
-      genders: "/api/v1/genders",
-      users: "/api/v1/users",
-      lists: "/api/v1/lists",
-      auth: "/api/v1/auth",
-      upload: "/api/v1/upload",
+      artists: "/my-playlists-api/v1/artists",
+      genders: "/my-playlists-api/v1/genders",
+      users: "/my-playlists-api/v1/users",
+      lists: "/my-playlists-api/v1/lists",
+      auth: "/my-playlists-api/v1/auth",
+      upload: "/my-playlists-api/v1/upload",
     };
+    this.listen();
     this.redisCacheConnect();
     this.mongoconnect();
     this.middleware();
     this.router();
-    this.listen();
   }
 
   async redisCacheConnect() {

@@ -17,13 +17,13 @@ router.get(
 );
 
 router.get(
-  "/userlists",
+  "/user-lists",
   [validateJwt, caching.cache, validateRole.hasRol("USER", "ADMIN")],
   controllerList.getUserList
 );
 
 router.post(
-  "/createlists",
+  "/create",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
@@ -35,7 +35,7 @@ router.post(
 );
 
 router.delete(
-  "/deletelists/:id",
+  "/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
@@ -47,7 +47,7 @@ router.delete(
 );
 
 router.post(
-  "/addsongs/:id",
+  "/add-song/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
@@ -66,7 +66,7 @@ router.post(
 );
 
 router.put(
-  "/updatelistnames/:id",
+  "/update-list-name/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
@@ -80,7 +80,7 @@ router.put(
 );
 
 router.put(
-  "/updatesongnames/:id",
+  "/update-song-name/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
@@ -95,7 +95,7 @@ router.put(
 );
 
 router.delete(
-  "/deletesongs/:id",
+  "/delete-song/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),

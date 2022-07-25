@@ -15,7 +15,7 @@ router.get(
 );
 
 router.post(
-  "/createdartists",
+  "/create",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
