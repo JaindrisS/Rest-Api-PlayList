@@ -1,0 +1,1299 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Api rest playlists.",
+    "description": "Api en la que las personas pueden generar actualizar y obtener sus listas de reproducción de sus artistas favoritos .",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/my-playlists-api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Maneja el registro y el acceso de los usuarios"
+    },
+    {
+      "name": "users",
+      "description": "Maneja la informacion de los usuarios"
+    },
+    {
+      "name": "lists",
+      "description": "Maneja la informacion de las listas usuarios"
+    },
+    {
+      "name": "artists",
+      "description": "Maneja la informacion de los artistas"
+    },
+    {
+      "name": "genders",
+      "description": "Maneja la informacion de los generos"
+    },
+    {
+      "name": "img",
+      "description": "Maneja la subida y actualizacion de las imagenes de los usuarios y artistas"
+    }
+  ],
+
+  "paths": {
+    "/auth/signin": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Crear un nuevo usuario",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(Created) Usuario creado con exito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "name": "TEST1",
+                    "email": "test1@user.com",
+                    "rol": "USER",
+                    "status": true,
+                    "_id": "62e5acfbc06c1e8ee8f51662",
+                    "createdAt": "2022-07-30T22:13:15.265Z",
+                    "updatedAt": "2022-07-30T22:13:15.265Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "ingresar/login de usuario",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "description": "password de usuario"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "correo del usuario"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(login ok) Acceso de usuario  con exito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Login ok",
+                    "user": {
+                      "_id": "62e5a57c0484633ac9fd6864",
+                      "name": "JAINDRIS",
+                      "email": "suport@user.com",
+                      "status": true
+                    },
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MmU1YTU3YzA0ODQ2MzNhYzlmZDY4NjQiLCJpYXQiOjE2NTkyMTcyOTMsImV4cCI6MTY1OTI2MDQ5M30.E--HeDL69BR1DrfHwIFuTkgRmA_t1Zp4LXQ9v1UD0Jc"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Obtiene la informacion de la base de datos de un usuario.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "(OK) La informacion del usuario se obtuvo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "_id": "62dd7579d5ae8e9b3289dc3e",
+                    "name": "SUPORT",
+                    "email": "Jaindris@Admin.com",
+                    "rol": "ADMIN",
+                    "status": true,
+                    "createdAt": "2022-07-24T16:38:17.063Z",
+                    "updatedAt": "2022-07-30T15:10:39.246Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/update/{id}": {
+      "put": {
+        "tags": ["users"],
+        "summary": "Actualiza la informacion de un usuario en la base de datos.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del usuario a actualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BodyUserPut"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion del usuario se actualizo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "_id": "62dd7579d5ae8e9b3289dc3e",
+                    "name": "SUPORT",
+                    "email": "Jaindris@Admin.com",
+                    "rol": "ADMIN",
+                    "status": true,
+                    "createdAt": "2022-07-24T16:38:17.063Z",
+                    "updatedAt": "2022-07-30T15:10:39.246Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/delete/{id}": {
+      "delete": {
+        "tags": ["users"],
+        "summary": "Elimina logicamente a un cliente.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del usuario a borrar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "(OK) El usuario se elimino correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "User Delete",
+                    "_id": "62dd7579d5ae8e9b3289dc3e",
+                    "name": "SUPORT",
+                    "email": "admin@Admin.com",
+                    "rol": "ADMIN",
+                    "status": false,
+                    "createdAt": "2022-07-24T16:38:17.063Z",
+                    "updatedAt": "2022-07-30T21:34:18.783Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+
+    "/genders": {
+      "get": {
+        "tags": ["genders"],
+        "summary": "Obtiene la informacion de la base de datos de los generos disponibles.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "(OK) La informacion del genero se obtuvo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "gender": [
+                      {
+                        "_id": "62c43a3e1f4946d5ac23f2ae",
+                        "name": "Regaeton",
+                        "status": true,
+                        "createdAt": "2022-07-05T13:18:54.562Z",
+                        "updatedAt": "2022-07-05T13:18:54.562Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/genders/create": {
+      "post": {
+        "tags": ["genders"],
+        "summary": "Crea un nuevo genero, requiere pasar el token por el header",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/genders"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion del genero se creo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "gender": {
+                      "name": "Pop",
+                      "status": true,
+                      "_id": "62e70726a87dba426d417f69",
+                      "createdAt": "2022-07-31T22:50:14.133Z",
+                      "updatedAt": "2022-07-31T22:50:14.133Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/genders/update/{id}": {
+      "put": {
+        "tags": ["genders"],
+        "summary": "Actualiza la informacion de un genero en la base de datos.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del genero a actualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/genders"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion del genero se actualizo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Gender Update",
+                    "gender": {
+                      "_id": "62e70763086631b93d406860",
+                      "name": "Rap",
+                      "status": true,
+                      "createdAt": "2022-07-31T22:51:15.244Z",
+                      "updatedAt": "2022-07-31T22:53:04.226Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/genders/delete/{id}": {
+      "delete": {
+        "tags": ["genders"],
+        "summary": "Elimina logicamente a un genero.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del genero a borrar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "(OK) El genero se elimino correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Gender Delete",
+                    "gender": {
+                      "_id": "62c43a3e1f4946d5ac23f2ae",
+                      "name": "Salsa",
+                      "status": false,
+                      "createdAt": "2022-07-05T13:18:54.562Z",
+                      "updatedAt": "2022-07-31T22:55:43.161Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/artists": {
+      "get": {
+        "tags": ["artists"],
+        "summary": "Obtiene la informacion de la base de datos de los artistas disponibles.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "(OK) La informacion del artista se obtuvo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "_id": "62c43a221f4946d5ac23f2a9",
+                    "name": "Frank Gomez",
+                    "status": true,
+                    "createdAt": "2022-07-05T13:18:26.764Z",
+                    "updatedAt": "2022-07-23T16:05:58.939Z",
+                    "img": "https://res.cloudinary.com/dm8ilojck/image/upload/v1658592358/duhzagsdcjlzmkyzclmy.jpg"
+                  }
+                }
+              }
+            }
+          },
+
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/artists/create": {
+      "post": {
+        "tags": ["artists"],
+        "summary": "Crea un nuevo artista, requiere pasar el token por el header",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/artists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion del artista se creo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "name": "Jose sanchez",
+                    "status": true,
+                    "_id": "62e6fc896112883b03be1768",
+                    "createdAt": "2022-07-31T22:04:57.640Z",
+                    "updatedAt": "2022-07-31T22:04:57.640Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/artists/update/{id}": {
+      "put": {
+        "tags": ["artists"],
+        "summary": "Actualiza la informacion de un artista en la base de datos.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del artista a actualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/artists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion del artista se actualizo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Artist update",
+                    "artis": {
+                      "_id": "62e6fd95d7081e9007c47e36",
+                      "name": "juaquin",
+                      "status": true,
+                      "createdAt": "2022-07-31T22:09:25.242Z",
+                      "updatedAt": "2022-07-31T22:13:03.403Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/artists/delete/{id}": {
+      "delete": {
+        "tags": ["artists"],
+        "summary": "Elimina logicamente a un artista.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del artista a borrar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "(OK) El artista se elimino correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Artist Delete",
+                    "artist": {
+                      "_id": "62e6fc896112883b03be1768",
+                      "name": "Jose sanchez",
+                      "status": false,
+                      "createdAt": "2022-07-31T22:04:57.640Z",
+                      "updatedAt": "2022-07-31T22:04:57.640Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+
+    "/lists": {
+      "get": {
+        "tags": ["lists"],
+        "summary": "Obtiene la informacion de la base de datos de las listas disponibles.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "(OK) La informacion del la lista se obtuvo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "list": [
+                      {
+                        "_id": "62c8bef1c6dce5a5697cdb9d",
+                        "user": {
+                          "_id": "62e6fa30f269f83fb5461afa",
+                          "name": "JAINDRIS"
+                        },
+                        "namelist": "favoritas",
+                        "songs": [
+                          {
+                            "title": "Yonaguni",
+                            "artist": {
+                              "_id": "62c43a221f4946d5ac23f2a9",
+                              "name": "ignacio diomedes"
+                            },
+                            "gender": {
+                              "_id": "62c43a3e1f4946d5ac23f2ae",
+                              "name": "Salsa"
+                            },
+                            "status": true,
+                            "_id": "62c8bf4ec6dce5a5697cdba8"
+                          },
+                          {
+                            "title": "Entra",
+                            "artist": {
+                              "_id": "62c43a221f4946d5ac23f2a9",
+                              "name": "ignacio diomedes"
+                            },
+                            "gender": {
+                              "_id": "62c43a3e1f4946d5ac23f2ae",
+                              "name": "Salsa"
+                            },
+                            "status": true,
+                            "_id": "62c8bf58c6dce5a5697cdbae"
+                          }
+                        ],
+                        "createdAt": "2022-07-08T23:34:09.618Z",
+                        "updatedAt": "2022-07-08T23:35:52.619Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lists/create": {
+      "post": {
+        "tags": ["lists"],
+        "summary": "Crea una nueva lista, requiere pasar el token por el header",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/lists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion la lista creo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "list": {
+                      "user": "62e6fa30f269f83fb5461afa",
+                      "namelist": "nueva lista",
+                      "status": true,
+                      "_id": "62e70c16f0f6269ae3348ef2",
+                      "songs": [],
+                      "createdAt": "2022-07-31T23:11:18.920Z",
+                      "updatedAt": "2022-07-31T23:11:18.920Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/lists/delete/{id}": {
+      "delete": {
+        "tags": ["lists"],
+        "summary": "Elimina logicamente  una lista.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador de la lista a eliminar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "(OK) La lista se elimino correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "List delete ok"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/lists/add-song/{id}": {
+      "post": {
+        "tags": ["lists"],
+        "summary": "Agregar una cancion a una lista",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador de la lista que se agregara la nueva cancion",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "nombre de la cancion"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "description": "id de un genero al cual se quiera asociar la cancion"
+                  },
+                  "artist": {
+                    "type": "string",
+                    "description": "id de un artista al cual se quiera asociar la cancion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La cancion se creo en la lista correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Song ejemplo2 added "
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/lists/update-list-name/{id}": {
+      "put": {
+        "tags": ["lists"],
+        "summary": "Actualiza el nombre de una lista en la base de datos.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador de la lista  a actualizar el nombre",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/lists"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La iformacion del artista se actualizo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "List name updated to lista de pop "
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/lists/update-song-name/{id}": {
+      "put": {
+        "tags": ["lists"],
+        "summary": "Actualiza el nombre de una cancion,(debera pasar el id de la cancion por el body)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador de la lista , donde se encuentra la cancion que se actualizara",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "nombre de la cancion"
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "id de la cancion que se va actualizar"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) El nombre de la cancion se actualizo correctamente ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Title successfully updated"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/lists/delete-song/{id}": {
+      "delete": {
+        "tags": ["lists"],
+        "summary": "borrar una cancion,(debera pasar el id de la cancion por el body)",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador de la lista , donde se encuentra la cancion que se borrara",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "id de la cancion que se va a borrar"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La cancion se borro de la lista correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Song successfully delete"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/lists/user-lists": {
+      "get": {
+        "tags": ["lists"],
+        "summary": "Obtener las listas de un usuario",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+
+        "responses": {
+          "201": {
+            "description": "(OK) ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "userLists": [
+                      {
+                        "_id": "62c8bef1c6dce5a5697cdb9d",
+                        "user": {
+                          "_id": "62e6fa30f269f83fb5461afa",
+                          "name": "JAINDRIS"
+                        },
+                        "namelist": "favoritas",
+                        "status": true,
+                        "songs": [
+                          {
+                            "title": "Yonaguni",
+                            "artist": "62c43a221f4946d5ac23f2a9",
+                            "gender": "62c43a3e1f4946d5ac23f2ae",
+                            "status": true,
+                            "_id": "62c8bf4ec6dce5a5697cdba8"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "Unauthorized": {
+        "description": "(Unauthorized) No hay autorizacion para llamar al servicio"
+      },
+      "NotFound": {
+        "description": "(NotFound) No se encontro informacion"
+      },
+      "BadRequest": {
+        "description": "(Bad Request) Los datos enviados son incorrectos o hay datos obligatorios no enviados"
+      },
+      "ServerError": {
+        "description": "Error en servidor"
+      }
+    },
+    "parameters": {
+      "token": {
+        "in": "header",
+        "name": "token",
+        "description": "Token de autenticacion en API.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "nombre de usuario"
+          },
+          "password": {
+            "type": "string",
+            "description": "password de usuario"
+          },
+          "email": {
+            "type": "string",
+            "description": "correo del usuario"
+          }
+        }
+      },
+      "artists": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "nombre de artista"
+          }
+        }
+      },
+      "genders": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "nombre del genero"
+          }
+        }
+      },
+      "lists": {
+        "type": "object",
+        "properties": {
+          "namelist": {
+            "type": "string",
+            "description": "nombre de la lista"
+          }
+        }
+      },
+      "ExitoUserPost": {
+        "type": "object",
+        "properties": {
+          "respuesta": {
+            "type": "integer",
+            "enum": [1],
+            "description": "Bandera que nos dice si la llamada al servicio fue satisfactoria"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Id correspondiente al cliente"
+          }
+        }
+      },
+      "ExitoUserGet": {
+        "type": "object",
+        "properties": {
+          "respuesta": {
+            "type": "integer",
+            "enum": [1],
+            "description": "Bandera que nos dice si la llamada al servicio fue satisfactoria"
+          }
+        }
+      },
+      "BodyUserPut": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Primer nombre del cliente"
+          },
+          "password": {
+            "type": "string",
+            "description": "Segundo nombre del cliente"
+          }
+        }
+      }
+    }
+  }
+}

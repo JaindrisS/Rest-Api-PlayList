@@ -1,8 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const { mongoConnect } = require("../db/config");
-const { client } = require("../middleware/cache");
 const fileUpload = require("express-fileupload");
+const { mongoConnect } = require("../db/config");
+const swaggerUi = require("swagger-ui-express");
+const { client } = require("../middleware/cache");
+const swaggerDocument = require("../helpers/swagger.json");
 
 class Server {
   constructor() {
@@ -41,6 +43,12 @@ class Server {
         tempFileDir: "/tmp/",
         createParentPath: true,
       })
+    );
+
+    this.app.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
     );
   }
 
