@@ -5,6 +5,8 @@ const validateResult = require("../../middleware/validateResult");
 const controllerAuth = require("../../controllers/auth");
 
 const router = Router();
+
+
 // Register
 router.post(
   "/signin",

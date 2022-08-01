@@ -35,7 +35,7 @@ router.post(
 );
 
 router.delete(
-  "/:id",
+  "/delete/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),

@@ -15,7 +15,7 @@ router.get(
 );
 
 router.put(
-  "/:id",
+  "/update/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
@@ -32,7 +32,7 @@ router.put(
 );
 
 router.delete(
-  "/:id",
+  "/delete/:id",
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
