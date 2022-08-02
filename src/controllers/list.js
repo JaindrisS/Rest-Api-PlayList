@@ -79,6 +79,14 @@ const addNewSong = async (req, res = response) => {
   const { id } = req.params;
   const { title, gender, artist } = req.body;
 
+  const songExists = await List.findOne({
+    $and: [{ _id: id }, { "songs.title": { $regex: title, $options: "i" } }],
+  });
+
+  if (songExists) {
+    return res.json(`the title of the song ${title} already exists`);
+  }
+
   const list = await List.findByIdAndUpdate(id, {
     $push: {
       songs: {

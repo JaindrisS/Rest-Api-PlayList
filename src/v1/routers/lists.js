@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { body, param } = require("express-validator");
+const { body, param, check } = require("express-validator");
 const validateJwt = require("../../middleware/validateJwt");
 const caching = require("../../middleware/cache");
 const validateRole = require("../../middleware/validateRole");
@@ -51,15 +51,13 @@ router.post(
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
-    param("id").custom(dbValidations.idListExist),
+    param("id").custom(dbValidations.idListExist).bail(),
     param("id", "Enter a valid id").isMongoId(),
     body("artist").custom(dbValidations.idArtistExists),
     body("artist", "Enter a valid id").isMongoId(),
     body("gender").custom(dbValidations.idGenderExists),
     body("gender", "Enter a valid id").isMongoId(),
     body("title", "Enter a title").notEmpty(),
-    body("title").custom(dbValidations.nameSongExists),
-
     validateFields,
   ],
   controllerList.addNewSong
