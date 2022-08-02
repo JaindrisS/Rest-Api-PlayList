@@ -36,8 +36,9 @@ router.delete(
   [
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
-    param("id").custom(dbValidations.IdUserExists),
     param("id", "Id invalid").isMongoId(),
+    param("id").custom(dbValidations.IdUserExists),
+    validateFields,
   ],
   controllersUser.deleteUser
 );
