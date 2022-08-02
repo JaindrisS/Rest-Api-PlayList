@@ -27,9 +27,12 @@ const updateUser = async (req, res = response) => {
     password: resto.password,
   };
 
-  const user = await User.findByIdAndUpdate(id, datos);
+  const findUser = await User.findByIdAndUpdate(id, datos, {
+    returnDocument: "after",
+    select: "name email createdAt updatedAt img",
+  });
 
-  res.status(201).json({ user });
+  res.status(201).json({ msg: "updated user", findUser });
 };
 
 const deleteUser = async (req, res = response) => {
@@ -38,7 +41,7 @@ const deleteUser = async (req, res = response) => {
   const user = await User.findByIdAndUpdate(
     id,
     { status: false },
-    { new: true }
+    { returnDocument: "after", select: "name email createdAt updatedAt img" }
   );
 
   res.status(200).json({ msg: "User Delete", user });
