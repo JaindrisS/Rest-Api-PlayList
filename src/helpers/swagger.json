@@ -1184,6 +1184,122 @@
           }
         }
       }
+    },
+    "/upload/user/{id}": {
+      "put": {
+        "tags": ["img"],
+        "summary": "Actualiza la imagen de un usuarios en la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del usuario  a actualizar la imagen",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/upload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La imagen se guardo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "_id": "62e6fa30f269f83fb5461afa",
+                    "name": "JAINDRIS",
+                    "email": "jaindris@admin.com",
+                    "createdAt": "2022-07-31T21:54:56.329Z",
+                    "updatedAt": "2022-08-02T00:47:06.421Z",
+                    "img": "https://res.cloudinary.com/dm8ilojck/image/upload/v1659401225/q9veacfuau7zuwnavx0f.png"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/upload/artist/{id}": {
+      "put": {
+        "tags": ["img"],
+        "summary": "Actualiza la imagen de un artista en la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del artista  a actualizar la imagen",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/upload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "(OK) La imagen se guardo correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "_id": "62e6fd95d7081e9007c47e36",
+                    "name": "pacheco",
+                    "status": true,
+                    "createdAt": "2022-07-31T22:09:25.242Z",
+                    "updatedAt": "2022-08-02T01:12:10.058Z",
+                    "img": "https://res.cloudinary.com/dm8ilojck/image/upload/v1659402729/fcoegk87xpsmuz6lsawk.jpg"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1254,6 +1370,15 @@
           "namelist": {
             "type": "string",
             "description": "nombre de la lista"
+          }
+        }
+      },
+      "upload": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
           }
         }
       },
