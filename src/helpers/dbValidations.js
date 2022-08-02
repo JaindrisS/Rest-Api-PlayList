@@ -2,6 +2,8 @@ const User = require("../models/user");
 const List = require("../models/list");
 const Artist = require("../models/artist");
 const Gender = require("../models/gender");
+const user = require("../models/user");
+const req = require("express/lib/request");
 
 // Users
 const nameExists = async (name) => {
@@ -95,7 +97,9 @@ const idGenderExists = async (value) => {
 // Song
 
 const nameSongExists = async (value = "") => {
-  const songExists = await List.findOne({ "songs.title": value });
+  const songExists = await List.findOne({
+    "songs.title": { $regex: value, $options: "i" },
+  });
 
   if (songExists) {
     throw new Error(`the title of the song ${value} already exists`);
