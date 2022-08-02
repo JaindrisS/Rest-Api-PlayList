@@ -1,8 +1,13 @@
 const { response } = require("express");
 const Artist = require("../models/artist");
+const { sendToCache } = require("../middleware/cache");
 
 const getArtis = async (req, res = response) => {
-  const artist = await Artist.find();
+  const artist = await Artist.find({ status: true });
+
+  let keyCache = req.originalUrl;
+
+  await sendToCache(keyCache, 120, artist);
 
   res.status(200).json({ artist });
 };

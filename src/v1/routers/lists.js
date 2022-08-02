@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { body, param, check } = require("express-validator");
 const validateJwt = require("../../middleware/validateJwt");
-const caching = require("../../middleware/cache");
+const { cache } = require("../../middleware/cache");
 const validateRole = require("../../middleware/validateRole");
 const dbValidations = require("../../helpers/dbValidations");
 const validateFields = require("../../middleware/validateResult");
@@ -18,7 +18,7 @@ router.get(
 
 router.get(
   "/user-lists",
-  [validateJwt, caching.cache, validateRole.hasRol("USER", "ADMIN")],
+  [validateJwt, cache, validateRole.hasRol("USER", "ADMIN")],
   controllerList.getUserList
 );
 

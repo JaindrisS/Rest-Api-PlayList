@@ -21,12 +21,13 @@ const getList = async (req, res = response) => {
 const getUserList = async (req, res = response) => {
   const token = req.header("token");
   const { uid } = jwt.verify(token, process.env.JWTPRIVATEKEY);
+  let keyCache = req.originalUrl;
 
   const userLists = await List.find({ user: uid }).populate({
     path: "user",
     select: "name",
   });
-  await sendToCache(uid, 3600, userLists);
+  await sendToCache(keyCache, 3600, userLists);
 
   res.status(200).json({ userLists });
 };

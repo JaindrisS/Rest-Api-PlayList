@@ -5,12 +5,13 @@ const validateRole = require("../../middleware/validateRole");
 const dbValidations = require("../../helpers/dbValidations");
 const validateFields = require("../../middleware/validateResult");
 const controllers = require("../../controllers/artist");
+const { cache } = require("../../middleware/cache");
 
 const router = Router();
 
 router.get(
   "/",
-  [validateJwt, validateRole.hasRol("USER", "ADMIN")],
+  [validateJwt, cache, validateRole.hasRol("USER", "ADMIN")],
   controllers.getArtis
 );
 
