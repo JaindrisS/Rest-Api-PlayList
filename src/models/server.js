@@ -9,7 +9,7 @@ const swaggerDocument = require("../helpers/swagger.json");
 class Server {
   constructor() {
     this.app = express();
-    this.port = 3000;
+    this.port = process.env.PORT || 8081;
     this.paths = {
       artists: "/my-playlists-api/v1/artists",
       genders: "/my-playlists-api/v1/genders",
