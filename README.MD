@@ -23,5 +23,5 @@ npm run dev
 #### Api donde podra crear obtener y actualizar la listas de reproduccion de sus artistas favoritos, antes debera registrarse y acceder con el correo y password,
 
 para cada endpoint debera pasar el token que obtiene al acceder con sus credenciales por el header.
-Aqui una muestra de los endpoint con swagger: http://localhost:3000/api-docs
+Aqui una muestra de los endpoint con swagger: https://playlists-restapi.herokuapp.com/api-docs
 ![imagen](/src/assets/swagger.png)
