@@ -3,7 +3,10 @@ const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 
 const getUsers = async (req, res = response) => {
-  const user = await User.find({ status: true }, { password: false });
+  const user = await User.find(
+    { status: true },
+    { password: false, resetpassword: false, __v: false }
+  );
 
   res.status(200).json({
     msg: "Users: ",
