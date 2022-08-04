@@ -23,6 +23,13 @@ const emailExits = async (email) => {
   }
 };
 
+const mailDoesNotExist = async (email) => {
+  const user = await User.findOne({ email: { $regex: email, $options: "i" } });
+  if (!user) {
+    throw new Error(`${email} mail  does not exist`);
+  }
+};
+
 const IdUserExists = async (id) => {
   const user = await User.findById(id);
 
@@ -138,4 +145,5 @@ module.exports = {
   nameSongExists,
   idSongExists,
   permittedCollections,
+  mailDoesNotExist,
 };
