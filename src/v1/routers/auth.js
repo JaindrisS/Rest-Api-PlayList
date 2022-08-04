@@ -6,7 +6,6 @@ const controllerAuth = require("../../controllers/auth");
 
 const router = Router();
 
-
 // Register
 router.post(
   "/signin",
@@ -25,7 +24,6 @@ router.post(
 );
 
 // log in
-
 router.post(
   "/login",
   [
@@ -34,6 +32,35 @@ router.post(
     validateResult,
   ],
   controllerAuth.logIn
+);
+
+// Reset password
+router.put(
+  "/forgot-password",
+  [
+    body("email", "The field cannot be empty, Enter your email").notEmpty(),
+    body("email").custom(dbValidations.mailDoesNotExist),
+    validateResult,
+  ],
+  controllerAuth.forgot
+);
+
+// create new password
+router.put(
+  "/reset-password",
+  [
+    body("password", "Enter new password").notEmpty().bail(),
+    body(
+      "password",
+      "The password must contain a minimum of 6 characters and a maximum of 14 characters."
+    ).isLength({
+      min: 6,
+      max: 14,
+    }),
+
+    validateResult,
+  ],
+  controllerAuth.resetpassword
 );
 
 module.exports = router;
