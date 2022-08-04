@@ -12,6 +12,10 @@ const UserSchema = new Schema(
       require: true,
     },
 
+    resetpassword: {
+      type: String,
+    },
+
     email: {
       type: String,
       require: true,
