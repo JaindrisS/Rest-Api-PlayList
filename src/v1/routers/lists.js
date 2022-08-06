@@ -6,6 +6,7 @@ const validateRole = require("../../middleware/validateRole");
 const dbValidations = require("../../helpers/dbValidations");
 const validateFields = require("../../middleware/validateResult");
 const controllerList = require("../../controllers/list");
+const validateMongoId = require("../../middleware/mongoid-validate");
 
 const router = Router();
 
@@ -37,9 +38,9 @@ router.post(
 router.delete(
   "/delete/:id",
   [
+    validateMongoId.idValid,
     validateJwt,
     validateRole.hasRol("USER", "ADMIN"),
-    param("id", "Invalid id").isMongoId(),
     param("id").custom(dbValidations.idListExist),
     validateFields,
   ],
@@ -50,9 +51,9 @@ router.post(
   "/add-song/:id",
   [
     validateJwt,
+    validateMongoId.idValid,
     validateRole.hasRol("USER", "ADMIN"),
     param("id").custom(dbValidations.idListExist).bail(),
-    param("id", "Enter a valid id").isMongoId(),
     body("artist").custom(dbValidations.idArtistExists),
     body("artist", "Enter a valid id").isMongoId(),
     body("gender").custom(dbValidations.idGenderExists),
@@ -67,9 +68,9 @@ router.put(
   "/update-list-name/:id",
   [
     validateJwt,
+    validateMongoId.idValid,
     validateRole.hasRol("USER", "ADMIN"),
     param("id").custom(dbValidations.idListExist),
-    param("id", "Enter a valid id").isMongoId(),
     body("namelist").custom(dbValidations.nameListExists),
     body("namelist", "Enter a name List").notEmpty(),
     validateFields,
@@ -81,9 +82,9 @@ router.put(
   "/update-song-name/:id",
   [
     validateJwt,
+    validateMongoId.idValid,
     validateRole.hasRol("USER", "ADMIN"),
     param("id").custom(dbValidations.idListExist),
-    param("id", "Enter a valid id").isMongoId(),
     body("id", "Enter a valid mongoid").isMongoId().notEmpty(),
     body("title", "The title can't be empty").notEmpty(),
     body("title").custom(dbValidations.nameSongExists),
@@ -96,9 +97,9 @@ router.delete(
   "/delete-song/:id",
   [
     validateJwt,
+    validateMongoId.idValid,
     validateRole.hasRol("USER", "ADMIN"),
     param("id").custom(dbValidations.idListExist),
-    param("id", "Enter a valid mongoid").isMongoId(),
     body("id", "Enter the id of the song to delete").notEmpty(),
     body("id").custom(dbValidations.idSongExists),
     validateFields,

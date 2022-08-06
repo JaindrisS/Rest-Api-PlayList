@@ -3,6 +3,7 @@ const { param, body } = require("express-validator");
 const dbValidations = require("../../helpers/dbValidations");
 const validateResult = require("../../middleware/validateResult");
 const controllerAuth = require("../../controllers/auth");
+const validateMongoId = require("../../middleware/mongoid-validate");
 
 const router = Router();
 
@@ -52,7 +53,7 @@ router.put(
     body("password", "Enter new password").notEmpty().bail(),
     body(
       "password",
-      "The password must contain a minimum of 6 characters and a maximum of 14 characters."
+      "The password must contain a minimum of 6 characters and a maxiomum f 14 characters."
     ).isLength({
       min: 6,
       max: 14,
@@ -60,7 +61,27 @@ router.put(
 
     validateResult,
   ],
-  controllerAuth.resetpassword
+  controllerAuth.resetPassword
+);
+
+// change password
+
+router.put(
+  "/change-password/:id",
+  [
+    validateMongoId.idValid,
+
+    param("id").custom(dbValidations.IdUserExists),
+    body("yourpassword", "enter your current password").notEmpty(),
+    body("newpassword", "enter your new password").notEmpty(),
+    body(
+      "newpassword",
+      "The password must contain a minimum of 6 characters and a maxiomum f 14 characters."
+    ).isLength({ min: 6, max: 14 }),
+    body("confirmpassword", "confirm your new password").notEmpty(),
+    validateResult,
+  ],
+  controllerAuth.changePassword
 );
 
 module.exports = router;

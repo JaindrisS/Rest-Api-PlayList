@@ -63,7 +63,7 @@ const forgot = async (req, res = response) => {
   const { email } = req.body;
   let message = ` The code to reset your password was sent to your email address ${email} `;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: { $regex: email, $options: "i" } });
 
   let token = await generateJwt(user.id);
   let verification = token;
@@ -79,7 +79,7 @@ const forgot = async (req, res = response) => {
   });
 };
 
-const resetpassword = async (req = request, res = response) => {
+const resetPassword = async (req = request, res = response) => {
   try {
     const { password } = req.body;
     const token = req.header("token");
@@ -119,4 +119,30 @@ const resetpassword = async (req = request, res = response) => {
   });
 };
 
-module.exports = { signIn, logIn, forgot, resetpassword };
+const changePassword = async (req = request, res = response) => {
+  const { id } = req.params;
+  const { yourpassword, newpassword, confirmpassword } = req.body;
+
+  const user = await User.findById(id);
+
+  const passValid = bcryptjs.compareSync(yourpassword, user.password);
+
+  if (!passValid) {
+    return res.status(400).json({
+      msg: "password invalid",
+    });
+  }
+
+  if (newpassword !== confirmpassword) {
+    return res.status(400).json({ msg: "passwords do not match" });
+  }
+
+  let salt = bcryptjs.genSaltSync(10);
+
+  user.password = bcryptjs.hashSync(newpassword, salt);
+  await user.save();
+
+  res.status(201).json({ msg: "Password has been changed successfully" });
+};
+
+module.exports = { signIn, logIn, forgot, resetPassword, changePassword };

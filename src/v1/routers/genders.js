@@ -5,6 +5,7 @@ const validateRole = require("../../middleware/validateRole");
 const dbValidations = require("../../helpers/dbValidations");
 const validateFields = require("../../middleware/validateResult");
 const controllerGender = require("../../controllers/gender");
+const validateMongoId = require("../../middleware/mongoid-validate");
 
 const router = Router();
 
@@ -31,8 +32,8 @@ router.put(
   "/update/:id",
   [
     validateJwt,
+    validateMongoId.idValid,
     validateRole.hasRol("USER", "ADMIN"),
-    param("id").isMongoId(),
     param("id").custom(dbValidations.idGenderExists),
     body("name", "Enter a name ").notEmpty().optional(),
     body("name").custom(dbValidations.nameGenderExists).optional(),
@@ -45,8 +46,8 @@ router.delete(
   "/delete/:id",
   [
     validateJwt,
+    validateMongoId.idValid,
     validateRole.hasRol("USER", "ADMIN"),
-    param("id").isMongoId(),
     param("id").custom(dbValidations.idGenderExists),
     validateFields,
   ],
