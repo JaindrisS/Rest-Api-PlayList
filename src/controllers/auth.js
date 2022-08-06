@@ -1,19 +1,18 @@
 const { response, request } = require("express");
-const bcryptjs = require("bcryptjs");
 const User = require("../models/user");
 const { generateJwt } = require("../helpers/generatejwt");
 const { sendEmail } = require("../helpers/emailer");
 const jwt = require("jsonwebtoken");
+const { comparePassword, hash } = require("../helpers/bcript");
 
 const signIn = async (req, res = response) => {
   const { __v, name, password, ...resto } = req.body;
 
-  const salt = bcryptjs.genSaltSync(10);
-  const hast = bcryptjs.hashSync(password, salt);
+  const passwordHash = hash(10, password);
 
   const data = {
     name: name.toUpperCase(),
-    password: hast,
+    password: passwordHash,
     ...resto,
   };
 
@@ -40,7 +39,7 @@ const logIn = async (req, res = response) => {
       return res.status(400).json({ msg: "Invalid email or password" });
     }
 
-    const userValid = bcryptjs.compareSync(password, user.password);
+    const userValid = comparePassword(password, user.password);
 
     if (!userValid) {
       return res.status(400).json({ msg: `Incorrect password` });
@@ -103,11 +102,10 @@ const resetPassword = async (req = request, res = response) => {
     }
 
     // encriptar password
-    const salt = bcryptjs.genSaltSync(10);
 
-    const hast = bcryptjs.hashSync(password, salt);
+    const passwordHash = hash(10, password);
 
-    user.password = hast;
+    user.password = passwordHash;
     user.resetpassword = null;
     await user.save();
   } catch (error) {
@@ -125,7 +123,7 @@ const changePassword = async (req = request, res = response) => {
 
   const user = await User.findById(id);
 
-  const passValid = bcryptjs.compareSync(yourpassword, user.password);
+  const passValid = comparePassword(yourpassword, user.password);
 
   if (!passValid) {
     return res.status(400).json({
@@ -137,9 +135,8 @@ const changePassword = async (req = request, res = response) => {
     return res.status(400).json({ msg: "passwords do not match" });
   }
 
-  let salt = bcryptjs.genSaltSync(10);
+  user.password = hash(10, newpassword);
 
-  user.password = bcryptjs.hashSync(newpassword, salt);
   await user.save();
 
   res.status(201).json({ msg: "Password has been changed successfully" });

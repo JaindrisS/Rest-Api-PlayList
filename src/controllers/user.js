@@ -1,6 +1,5 @@
 const { response } = require("express");
 const User = require("../models/user");
-const bcryptjs = require("bcryptjs");
 
 const getUsers = async (req, res = response) => {
   const user = await User.find(
@@ -17,11 +16,6 @@ const getUsers = async (req, res = response) => {
 const updateUser = async (req, res = response) => {
   const { id } = req.params;
   const { img, name, email, ...resto } = req.body;
-
-  if (resto.password) {
-    const salt = bcryptjs.genSaltSync(10);
-    resto.password = bcryptjs.hashSync(resto.password, salt);
-  }
 
   const datos = {
     img,
