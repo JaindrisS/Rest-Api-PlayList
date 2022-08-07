@@ -4,7 +4,7 @@ const dbValidations = require("../../helpers/dbValidations");
 const validateResult = require("../../middleware/validateResult");
 const controllerAuth = require("../../controllers/auth");
 const validateMongoId = require("../../middleware/mongoid-validate");
-
+const validateJwt = require("../../middleware/validateJwt");
 const router = Router();
 
 // Register
@@ -70,7 +70,7 @@ router.put(
   "/change-password/:id",
   [
     validateMongoId.idValid,
-
+    validateJwt,
     param("id").custom(dbValidations.IdUserExists),
     body("yourpassword", "enter your current password").notEmpty(),
     body("newpassword", "enter your new password").notEmpty(),
