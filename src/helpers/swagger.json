@@ -8,6 +8,9 @@
   "servers": [
     {
       "url": "https://playlists-restapi.herokuapp.com/my-playlists-api/v1"
+    },
+    {
+      "url": " http://localhost:3000/my-playlists-api/v1"
     }
   ],
   "tags": [
@@ -123,6 +126,172 @@
                       "status": true
                     },
                     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MmU1YTU3YzA0ODQ2MzNhYzlmZDY4NjQiLCJpYXQiOjE2NTkyMTcyOTMsImV4cCI6MTY1OTI2MDQ5M30.E--HeDL69BR1DrfHwIFuTkgRmA_t1Zp4LXQ9v1UD0Jc"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/auth/change-password/{id}": {
+      "put": {
+        "tags": ["auth"],
+        "summary": "Endpoint para cambiar el password de un usuario",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del usuario ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "yourpassword": {
+                    "type": "string",
+                    "description": " Password actual"
+                  },
+                  "newpassword": {
+                    "type": "string",
+                    "description": " nuevo password"
+                  },
+                  "confirmpassword": {
+                    "type": "string",
+                    "description": " confirmar nuevo password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Se restablecio el password con exito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Password has been changed successfully"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+
+    "/auth/forgot-password": {
+      "put": {
+        "tags": ["auth"],
+        "summary": "Olvido su password, este endpoint le envia a el email un codigo token para restablecerlo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "correo del usuario"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Se envio el correo con exito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": " The code to reset your password was sent to your email address admin@admin.com "
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "put": {
+        "tags": ["auth"],
+        "summary": "Endpoint para restablecer su password mediante el codigo enviado a su email",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/token"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "description": " nuevo password del usuario"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Se restablecio el password con exito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": {
+                    "msg": "Password changed"
                   }
                 }
               }
